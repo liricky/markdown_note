@@ -229,3 +229,4 @@ Attention机制
 - L1正则：参数绝对值的和；对L0的逼近（0越多越好，相似于参数绝对值和越小越好），稀疏化（不可导不方便计算，进而有了L2）Pytorch中使用需要自己定义
 - L2正则：参数的平方和（Pytorch自带，weight_decay）
 - optimizer = torch.optim.SGD(model.parameters(), lr=0.01, weight_decay=0.001)
+
