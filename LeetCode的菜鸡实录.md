@@ -105,7 +105,57 @@ class Solution {
 
 这道题目等过一段时间可以重做一遍，到时候应该会重新理解一下，然后再解释一遍，现在只是理解了大概的思想，但是在具体的问题中还是存在很多问题，比如对于边界问题限制的理解。
 
-**延伸：中位数**
+**延伸：中位数、==双有序数组找第k小值==**
+
+```java
+// 双有序数组找第k小值
+public int getKthElement(int[] nums1, int[] nums2, int k) {
+    /* 主要思路：要找到第 k (k>1) 小的元素，那么就取 pivot1 = nums1[k/2-1] 和 pivot2 = nums2[k/2-1] 进行比较
+     * 这里的 "/" 表示整除
+     * nums1 中小于等于 pivot1 的元素有 nums1[0 .. k/2-2] 共计 k/2-1 个
+     * nums2 中小于等于 pivot2 的元素有 nums2[0 .. k/2-2] 共计 k/2-1 个
+     * 取 pivot = min(pivot1, pivot2)，两个数组中小于等于 pivot 的元素共计不会超过 (k/2-1) + (k/2-1) <= k-2 个
+     * 这样 pivot 本身最大也只能是第 k-1 小的元素
+     * 如果 pivot = pivot1，那么 nums1[0 .. k/2-1] 都不可能是第 k 小的元素。把这些元素全部 "删除"，剩下的作为新的 nums1 数组
+     * 如果 pivot = pivot2，那么 nums2[0 .. k/2-1] 都不可能是第 k 小的元素。把这些元素全部 "删除"，剩下的作为新的 nums2 数组
+     * 由于我们 "删除" 了一些元素（这些元素都比第 k 小的元素要小），因此需要修改 k 的值，减去删除的数的个数
+     */
+
+     int length1 = nums1.length, length2 = nums2.length;
+     int index1 = 0, index2 = 0;
+     int kthElement = 0;
+
+     while (true) {
+         // 边界情况
+         if (index1 == length1) {
+             return nums2[index2 + k - 1];
+         }
+         if (index2 == length2) {
+             return nums1[index1 + k - 1];
+         }
+         if (k == 1) {
+             return Math.min(nums1[index1], nums2[index2]);
+         }
+            
+         // 正常情况
+         int half = k / 2;
+         int newIndex1 = Math.min(index1 + half, length1) - 1;
+         int newIndex2 = Math.min(index2 + half, length2) - 1;
+         int pivot1 = nums1[newIndex1], pivot2 = nums2[newIndex2];
+         if (pivot1 <= pivot2) {
+             k -= (newIndex1 - index1 + 1);
+             index1 = newIndex1 + 1;
+         } else {
+             k -= (newIndex2 - index2 + 1);
+             index2 = newIndex2 + 1;
+         }
+     }
+}
+```
+
+
+
+**二刷：还是没做出来，然后看了方法二也就是复杂但更快的那个方法理解依旧不到位，感觉方法一的刚满足时间复杂度的方法相对来说更好理解。这题先不再交了，留着过两天再看，至少要能用方法一那个完成实现吧。方法一的关键应该是先转化为找第n小问题，这样一次性就解决了之后递归里面的奇偶判断，之后找第n小的思路当然就是二分。注意这里实际上没用递归而是用的等价形式，节省栈空间，而且while内也只需要保存下标就可以了。**
 
 ## 5、最长回文子串
 
