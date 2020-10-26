@@ -230,3 +230,16 @@ Attention机制
 - L2正则：参数的平方和（Pytorch自带，weight_decay）
 - optimizer = torch.optim.SGD(model.parameters(), lr=0.01, weight_decay=0.001)
 
+## 截取已有网络结构中的部分层
+
+思路：转化为list之后截取
+
+```python
+truncated_model = nn.Sequential(*list(model.children())[:8])
+```
+
+[参考博客](https://www.jianshu.com/p/d2a066e05078)
+
+## CrossEntropyLoss交叉熵
+
+使用交叉熵损失函数时，loss_func(out, y)。其中out输出的结果是一个二维的列表，内列表中的维度数与分类的类别数相同；y是一个一维的列表，存放着对应out中每个样本的类别号。
